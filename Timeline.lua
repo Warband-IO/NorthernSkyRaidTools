@@ -766,6 +766,45 @@ function NSI:CreateTimelineWindow()
     timelineWindow:SetScript("OnDragStart", timelineWindow.StartMoving)
     timelineWindow:SetScript("OnDragStop", timelineWindow.StopMovingOrSizing)
 
+    -- Make window resizable
+    timelineWindow:SetResizable(true)
+    timelineWindow:SetResizeBounds(600, 350, 1800, 900)
+
+    -- Create resize grip in bottom-right corner
+    local resizeButton = CreateFrame("Button", nil, timelineWindow)
+    resizeButton:SetSize(16, 16)
+    resizeButton:SetPoint("BOTTOMRIGHT", timelineWindow, "BOTTOMRIGHT", -2, 2)
+    resizeButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+    resizeButton:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
+    resizeButton:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
+    resizeButton:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" then
+            timelineWindow:StartSizing("BOTTOMRIGHT")
+        end
+    end)
+    resizeButton:SetScript("OnMouseUp", function(self, button)
+        timelineWindow:StopMovingOrSizing()
+    end)
+
+    -- Store header width for resize calculations
+    local header_width = 180
+
+    -- Update timeline size when window is resized
+    timelineWindow:SetScript("OnSizeChanged", function(self, width, height)
+        if self.timeline then
+            local newTimelineWidth = width - 40 - header_width
+            local newTimelineHeight = height - 130
+            self.timeline:SetSize(newTimelineWidth, newTimelineHeight)
+            if self.timeline.headerFrame then
+                self.timeline.headerFrame:SetHeight(newTimelineHeight)
+            end
+            -- Refresh the timeline to update scrolling bounds
+            if self.timeline.Refresh then
+                self.timeline:Refresh()
+            end
+        end
+    end)
+
     local options_dropdown_template = DF:GetTemplate("dropdown", "OPTIONS_DROPDOWN_TEMPLATE")
 
     -- Mode: "my" = My Reminders (from ProcessedReminder), "all" = All Reminders (from raw strings)
@@ -930,7 +969,6 @@ function NSI:CreateTimelineWindow()
 
     -- Create timeline component
     -- Height calculation: window_height - top_offset(60) - sliders(45) - help_text(25) = 420
-    local header_width = 180
     local timelineOptions = {
         width = window_width - 40 - header_width,  -- Subtract header width when detached
         height = window_height - 130,
