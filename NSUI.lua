@@ -18,7 +18,6 @@ local TABS_LIST = {
     { name = "Assignments", text = "Assignments"},
     { name = "EncounterAlerts", text = "Encounter Alerts"},
     { name = "PrivateAura", text = "Private Auras"},
-    { name = "Timeline", text = "Timeline"},
 }
 local authorsString = "By Reloe & Rav"
 
@@ -2130,7 +2129,6 @@ function NSUI:Init()
     local encounteralerts_tab = tabContainer:GetTabFrameByName("EncounterAlerts")
     local readycheck_tab = tabContainer:GetTabFrameByName("ReadyCheck")
     local privateaura_tab = tabContainer:GetTabFrameByName("PrivateAura")
-    local timeline_tab = tabContainer:GetTabFrameByName("Timeline")
 
     -- generic text display
     local generic_display = CreateFrame("Frame", "NSUIGenericDisplay", UIParent, "BackdropTemplate")
@@ -4675,7 +4673,6 @@ Press 'Enter' to hear the TTS]],
     NSUI.reminders_frame = BuildRemindersEditUI()
     NSUI.pasound_frame = BuildPASoundEditUI()
     NSUI.personal_reminders_frame = BuildPersonalRemindersEditUI()
-    NSUI.timeline_tab = BuildTimelineTabUI(timeline_tab)
 
     -- Version Number in status bar
     local versionTitle = C_AddOns.GetAddOnMetadata("NorthernSkyRaidTools", "Title")

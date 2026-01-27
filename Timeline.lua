@@ -759,7 +759,7 @@ function NSI:CreateTimelineWindow()
         UseStatusBar = false,
     })
     timelineWindow:SetPoint("CENTER")
-    timelineWindow:SetFrameStrata("HIGH")
+    timelineWindow:SetFrameStrata("DIALOG")
     timelineWindow:EnableMouse(true)
     timelineWindow:SetMovable(true)
     timelineWindow:RegisterForDrag("LeftButton")
